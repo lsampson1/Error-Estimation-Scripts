@@ -6,7 +6,8 @@
 #       - BaseDir available.
 #       - YYYYMMDDT0000Z_xxx_qc_BiasCorrfb_oo_qc_fdbk.nc, for the set date and variable under the BaseDir.
 #       - rossy_radii.nc, from NEMOVar suite. (Original is in ocean\OPERATIONAL_SUITE_V5.3\...)
-#       - Model run output. Bmod_sdv_mxl... and Bmod_sdv_wgt... (This is to format .nc files)
+#       - Error variance, length-scales and obs netCDF files. Examples for formatting output on model grid.
+#         Bmod_sdv_mxl... and Bmod_sdv_wgt... (This is to format .nc files)
 #       - Unzipped assimilated model runs. e.g. diaopfoam files (This is for depth gradient). UZ.sh script will unzip.
 #       - BaseDir should contain ocean\OPERATIONAL_SUITE_V5.3\...
 #       For running H-L/IPA.
@@ -36,7 +37,6 @@ from PyQt5.QtWidgets import QApplication, QDialog
 import os
 from Windows.mainwindow2 import Ui_MainWindow
 from Windows.directoryerror import Ui_DirectoryError
-# from prerequisitedirectory import Ui_PrerequisiteDirectory
 
 
 class MainWindow(QDialog):
@@ -118,47 +118,6 @@ class DirectoryError(QDialog):
         self.ui.label.setText(s0)
 
 
-# class PrerequisiteDirectory(QDialog):
-#     def __init__(self):
-#         super(PrerequisiteDirectory, self).__init__()
-#         self.ui = Ui_PrerequisiteDirectory()
-#         self.ui.setupUi(self)
-#         self.ui.pushButton.clicked.connect(self.browseslot)
-#         self.ui.buttonBox.accepted.connect(self.accept)
-#         self.ui.buttonBox.rejected.connect(self.reject)
-#
-#     def browseslot(self):
-#         options = QtWidgets.QFileDialog.Options()
-#         options |= QtWidgets.QFileDialog.DontUseNativeDialog
-#         options |= QtWidgets.QFileDialog.ShowDirsOnly
-#         my_dir = QtWidgets.QFileDialog.getExistingDirectory(
-#             None,
-#             "Select a folder",
-#             os.path.expanduser(os.path.dirname(self.ui.lineEdit_2.placeholderText())),
-#             options=options
-#         )
-#         if my_dir:
-#             self.ui.lineEdit_2.setPlaceholderText(my_dir)
-#             self.ui.lineEdit_2.setText(my_dir)
-#             self.ui.lineEdit_2.setCursorPosition(0)
-#             self.ui.lineEdit_2.setReadOnly(False)
-#
-#     def return_strings(self):
-#         return self.ui.lineEdit_2.text()
-#
-#     @staticmethod
-#     def get_data():
-#         pred = PrerequisiteDirectory()
-#         a = pred.exec_()
-#         if a == 1:
-#             return pred.return_strings()
-#         if a == 0:
-#             print(40 * '==')
-#             print(14 * '~~' + ' Run cancelled by user  ' + 14 * '~~')
-#             print(40 * '==')
-#             exit(0)
-
-
 def main():
     app = QApplication([])
     q = ['Select Base Directory', 'Select Prerequisite Directory', 0, 0, 'SST']
@@ -204,9 +163,9 @@ def main():
         outputsmain(q[0], q[4].lower(), ['IPA'])
     else:
         from HL import hlmain
-        # hlmain(q[0], q[4].lower())
+        hlmain(q[0], q[4].lower())
         from IPA import ipamain
-        # ipamain(q[0], q[4].lower())
+        ipamain(q[0], q[4].lower())
         from Outputs import outputsmain
         outputsmain(q[0], q[1], q[4].lower(), ['IPA', 'HL'])
 
